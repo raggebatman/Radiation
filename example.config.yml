@@ -1,0 +1,61 @@
+# Whether or not to enable radiation at the start of the round.
+# If false, radiation will not start after warhead detonation if it had been disabled the round prior.
+# Type: float
+enable_radiation_on_round_start: true
+# The delay in seconds after warhead detonation before radiation damage is dealt.
+# Type: float
+radiation_delay: 300
+# The death reason that the player will see due to this plugin.
+# Type: string
+death_reason: Died to alpha warhead radiation.
+# The timeframe between each damage tick specified in seconds.
+# Type: float
+tick_interval: 2
+# The damage that is dealt to the player as an absolute value.
+# Type: float
+tick_damage_absolute: 10
+# The damage that is dealt to the player as a percentage of their max health.
+# Type: float
+tick_damage_percent: 5
+# Enable or disable a broadcast to show when radiation has started.
+# Type: bool
+broadcast_enable: true
+# The text that is shown in the broadcast.
+# Type: string
+broadcast_text: Warhead radiation has reached the surface!
+# The duration in seconds of the broadcast.
+# Type: ushort
+broadcast_duration: 10
+# Enable or disable a hint to show players that radiation has started.
+# Type: bool
+hint_enable: false
+# The text that is shown in the hint.
+# Type: string
+hint_text: Radiation Poisoning
+# The duration in seconds of the hint.
+# Type: ushort
+hint_duration: 10
+# Select which roles will take absolute damage from radiation.
+# Type: List<RoleTypeId>
+takes_absolute_damage:
+- ChaosConscript
+- ChaosMarauder
+- ChaosRepressor
+- ChaosRifleman
+- ClassD
+- FacilityGuard
+- NtfCaptain
+- NtfPrivate
+- NtfSergeant
+- NtfSpecialist
+- Scientist
+- Tutorial
+# Select which roles will take percentage damage from radiation.
+# Type: List<RoleTypeId>
+takes_relative_damage:
+- Scp049
+- Scp0492
+- Scp096
+- Scp106
+- Scp173
+- Scp939
