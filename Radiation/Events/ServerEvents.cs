@@ -1,6 +1,7 @@
 ﻿using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
 using PluginAPI.Events;
+using Radiation.API;
 
 namespace Radiation.Events
 {
@@ -18,9 +19,10 @@ namespace Radiation.Events
         {
             Plugin.Singleton.StopRadiation();
 
-            if (!_config.EnableRadiationOnRoundStart) return;
-
-            Plugin.Singleton.EnableRadiation();
+            if (_config.EnableRadiationOnRoundStart)
+            {
+                Plugin.Singleton.EnableRadiation();
+            }
         }
 
         [PluginEvent(ServerEventType.RoundEnd)]
@@ -39,6 +41,14 @@ namespace Radiation.Events
         private void OnWarheadDetonation(WarheadDetonationEvent @event)
         {
             Plugin.Singleton.StartDelay();
+        }
+
+        [PluginEvent(ServerEventType.PlayerChangeRole)]
+        private void OnPlayerChangeRole(PlayerChangeRoleEvent @event)
+        {
+            if (!Plugin.Singleton.radiationStarted) return;
+
+            RadiationAPI.ShowHint(@event.Player, @event.NewRole);
         }
     }
 }

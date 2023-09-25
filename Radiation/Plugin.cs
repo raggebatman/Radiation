@@ -1,22 +1,21 @@
-﻿using PluginAPI.Core;
+﻿using System;
+using PluginAPI.Enums;
+using PluginAPI.Core;
 using PluginAPI.Core.Attributes;
 using PluginAPI.Events;
 
 using Radiation.Events;
-using System;
-using PluginAPI.Enums;
-
 namespace Radiation
 {
     partial class Plugin
     {
-        public static Plugin Singleton { get; set; }
+        public static Plugin Singleton { get; private set; }
 
         [PluginConfig]
         public Config Config;
 
         [PluginPriority(LoadPriority.Low)]
-        [PluginEntryPoint("radiation", "1.0.0", "Warhead radiation to hinder prolonged rounds.", "raggebatman")]
+        [PluginEntryPoint("radiation", "1.0.1", "Warhead radiation to hinder prolonged rounds.", "raggebatman")]
         void LoadPlugin()
         {
             try

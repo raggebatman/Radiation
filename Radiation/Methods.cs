@@ -1,21 +1,24 @@
-﻿using PluginAPI.Core;
+﻿using System.Collections.Generic;
+using PluginAPI.Core;
 using MEC;
 
 using Radiation.API;
-using System.Collections.Generic;
 
 namespace Radiation
 {
     public partial class Plugin
     {
-        private bool radiationEnabled { get; set; } = false;
-        private bool radiationStarted { get; set; } = false;
+        public bool radiationEnabled { get; private set; } = false;
+        public bool radiationStarted { get; private set; } = false;
+        public bool radiationDelayed { get; private set; } = false;
 
         public bool StartDelay()
         {
-            if (radiationStarted || !radiationEnabled) return false;
+            if (radiationStarted || !radiationEnabled || radiationDelayed) return false;
 
             Timing.RunCoroutine(DelayCoroutine(), "radiation_delay");
+
+            radiationDelayed = true;
 
             return true;
         }
@@ -24,13 +27,17 @@ namespace Radiation
         {
             if (radiationStarted || !radiationEnabled) return false;
 
+            Timing.KillCoroutines("radiation_delay");
+
+            radiationDelayed = false;
+
             Timing.RunCoroutine(TickCoroutine(), "radiation_tick");
+
+            radiationStarted = true;
 
             RadiationAPI.ShowHint();
 
             RadiationAPI.ShowBroadcast();
-
-            radiationStarted = true;
 
             return true;
         }
@@ -40,6 +47,8 @@ namespace Radiation
             if (!radiationStarted) return false;
 
             Timing.KillCoroutines("radiation_delay");
+
+            radiationDelayed = false;
 
             Timing.KillCoroutines("radiation_tick");
 
@@ -52,11 +61,17 @@ namespace Radiation
         {
             if (!radiationEnabled) return false;
 
-            radiationEnabled = false;
+            Timing.KillCoroutines("radiation_delay");
 
-            StopRadiation();
+            radiationDelayed = false;
+
+            Timing.KillCoroutines("radiation_tick");
+
+            radiationStarted = false;
 
             Log.Info("Disabled radiation");
+
+            radiationEnabled = false;
 
             return true;
         }
@@ -66,8 +81,6 @@ namespace Radiation
             if (radiationEnabled) return false;
 
             radiationEnabled = true;
-
-            if (Warhead.IsDetonated) StartRadiation();
 
             Log.Info("Enabled radiation");
 

@@ -15,6 +15,7 @@ namespace Radiation
         public override string Description => "Manage facility radiation";
         public override string[] Aliases => new string[] { };
 
+
         public override void LoadGeneratedCommands()
         {
             try
@@ -23,6 +24,7 @@ namespace Radiation
                 RegisterCommand(new StopCommand());
                 RegisterCommand(new EnableCommand());
                 RegisterCommand(new DisableCommand());
+                RegisterCommand(new StatusCommand());
             }
             catch (Exception e)
             {
@@ -46,8 +48,10 @@ namespace Radiation
             stringBuilder.AppendLine("- radiation stop - Stop doing tick damage");
             stringBuilder.AppendLine("- radiation enable - Enable tick damage, will start tick damage if warhead is detonated");
             stringBuilder.AppendLine("- radiation disable - Disable tick damage, will not start tick damage if warhead detonates");
+            stringBuilder.AppendLine("- radiation status - Show radiation status");
 
             response = StringBuilderPool.Shared.ToStringReturn(stringBuilder);
+
             return false;
         }
     }
