@@ -1,5 +1,7 @@
 ﻿using PluginAPI.Core;
 using PlayerStatsSystem;
+using Radiation.Enums;
+using PlayerRoles;
 
 namespace Radiation.API
 {
@@ -7,25 +9,61 @@ namespace Radiation.API
     {
         private static readonly Config _config = Plugin.Singleton.Config;
 
-        public static bool ShowHint()
+        public static RadiationDamage RadiationDamageType(RoleTypeId roleTypeId)
+        {
+            if (_config.TakesAbsoluteDamage.Contains(roleTypeId))
+            {
+                return RadiationDamage.Absolute;
+            }
+            else
+            if (_config.TakesRelativeDamage.Contains(roleTypeId))
+            {
+                return RadiationDamage.Relative;
+            }
+            else
+            {
+                return RadiationDamage.None;
+            }
+        }
+
+        public static RadiationDamage RadiationDamageType(Player player)
+        {
+            return RadiationDamageType(player.RoleBase.RoleTypeId);
+        }
+
+        public static bool ShowHint(Player player, RoleTypeId roleTypeId)
         {
             if (!_config.HintEnable) return false;
 
-            var players = Player.GetPlayers();
-
-            if (players.IsEmpty()) return false;
-
-            foreach (Player player in players)
+            switch (RadiationDamageType(roleTypeId))
             {
-                var id = player.RoleBase.RoleTypeId;
-
-                if (_config.TakesAbsoluteDamage.Contains(id) || _config.TakesRelativeDamage.Contains(id))
-                {
+                case RadiationDamage.Absolute:
+                case RadiationDamage.Relative:
                     player.ReceiveHint(_config.HintText, _config.HintDuration);
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        public static bool ShowHint(Player player)
+        {
+            return ShowHint(player, player.RoleBase.RoleTypeId);
+        }
+        public static bool ShowHint()
+        {
+            bool flag = false;
+
+            foreach (Player player in Player.GetPlayers())
+            {
+                if (ShowHint(player))
+                {
+                    flag = true;
                 }
             }
 
-            return true;
+            return flag;
         }
 
         public static bool ShowBroadcast()
@@ -37,43 +75,53 @@ namespace Radiation.API
             return true;
         }
 
-        public static void DealDamage()
+        public static bool DealDamage()
         {
-            var players = Player.GetPlayers();
+            bool flag = false;
 
-            foreach (Player player in players)
+            foreach (Player player in Player.GetPlayers())
             {
-                if (!player.IsAlive) continue;
-
-                var health = player.GetStatModule<HealthStat>();
-
-                var id = player.RoleBase.RoleTypeId;
-
-                float damage;
-
-                if (_config.TakesAbsoluteDamage.Contains(id))
+                if (DealDamage(player))
                 {
-                    damage = _config.TickDamageAbsolute;
-                }
-                else
-                if (_config.TakesRelativeDamage.Contains(id))
-                {
-                    damage = (health.MaxValue / 100) * _config.TickDamagePercent;
-                }
-                else
-                {
-                    continue;
-                }
-
-                if (health.CurValue - damage > 0f)
-                {
-                    player.Damage(damage, _config.DeathReason);
-                }
-                else
-                {
-                    player.Kill(_config.DeathReason);
+                    flag = true;
                 }
             }
+
+            return flag;
+        }
+
+        public static bool DealDamage(Player player)
+        {
+            if (!player.IsAlive) return false;
+
+            var health = player.GetStatModule<HealthStat>();
+
+            float damage;
+
+            switch (RadiationDamageType(player))
+            {
+                case RadiationDamage.Absolute:
+                    damage = _config.TickDamageAbsolute;
+                    break;
+
+                case RadiationDamage.Relative:
+                    damage = (health.MaxValue / 100) * _config.TickDamageRelative;
+                    break;
+
+                default:
+                    return false;
+            }
+
+            if (health.CurValue - damage > 0f)
+            {
+                player.Damage(damage, _config.DeathReason);
+            }
+            else
+            {
+                player.Kill(_config.DeathReason);
+            }
+
+            return true;
         }
     }
 }

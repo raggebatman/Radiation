@@ -1,42 +1,28 @@
-# Whether or not to enable radiation at the start of the round.
-# If false, radiation will not start after warhead detonation if it had been disabled the round prior.
-# Type: float
+# (bool) Whether to enable radiation at the start of the round
 enable_radiation_on_round_start: true
-# The delay in seconds after warhead detonation before radiation damage is dealt.
-# Type: float
+# (float) How many seconds to wait after warhead detonation before starting radiation
 radiation_delay: 300
-# The death reason that the player will see due to this plugin.
-# Type: string
+# (string) The reason that gets used on Damage and Kill methods
 death_reason: Died to alpha warhead radiation.
-# The timeframe between each damage tick specified in seconds.
-# Type: float
+# (float) How many seconds to wait between dealing damage
 tick_interval: 2
-# The damage that is dealt to the player as an absolute value.
-# Type: float
+# (float) Damage dealt to players specified as a constant
 tick_damage_absolute: 10
-# The damage that is dealt to the player as a percentage of their max health.
-# Type: float
-tick_damage_percent: 5
-# Enable or disable a broadcast to show when radiation has started.
-# Type: bool
+# (float) Damage dealt to players specified as a percentage
+tick_damage_relative: 5
+# (bool) Whether to show a broadcast when radiation starts
 broadcast_enable: true
-# The text that is shown in the broadcast.
-# Type: string
+# (string) What text should be in the broadcast
 broadcast_text: Warhead radiation has reached the surface!
-# The duration in seconds of the broadcast.
-# Type: ushort
+# (ushort) How many seconds the broadcast should be displayed for
 broadcast_duration: 10
-# Enable or disable a hint to show players that radiation has started.
-# Type: bool
+# (bool) Whether to show a hint when radiation starts and to players whose role changes
 hint_enable: false
-# The text that is shown in the hint.
-# Type: string
+# (string) What text should be in the hint
 hint_text: Radiation Poisoning
-# The duration in seconds of the hint.
-# Type: ushort
+# (ushort) How many seconds the hint should be displayed for
 hint_duration: 10
-# Select which roles will take absolute damage from radiation.
-# Type: List<RoleTypeId>
+# (List<RoleTypeId>) What roles should be dealt constant damage to
 takes_absolute_damage:
 - ChaosConscript
 - ChaosMarauder
@@ -50,8 +36,7 @@ takes_absolute_damage:
 - NtfSpecialist
 - Scientist
 - Tutorial
-# Select which roles will take percentage damage from radiation.
-# Type: List<RoleTypeId>
+# (List<RoleTypeId>) What roles should be dealt percentage damage to
 takes_relative_damage:
 - Scp049
 - Scp0492

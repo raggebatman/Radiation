@@ -73,9 +73,11 @@
     <Compile Include="Commands\Radiation\DisableCommand.cs" />
     <Compile Include="Commands\Radiation\EnableCommand.cs" />
     <Compile Include="Commands\Radiation\StartCommand.cs" />
+    <Compile Include="Commands\Radiation\StatusCommand.cs" />
     <Compile Include="Commands\Radiation\StopCommand.cs" />
     <Compile Include="Commands\RadiationCommand.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Enums\RadiationDamage.cs" />
     <Compile Include="Events\ServerEvents.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="Plugin.cs" />

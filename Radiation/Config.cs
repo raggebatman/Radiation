@@ -6,47 +6,47 @@ namespace Radiation
 {
     public class Config
     {
-        [Description("Whether or not to enable radiation at the start of the round.\n# If false, radiation will not start after warhead detonation if it had been disabled the round prior.\n# Type: float")]
+        [Description("(bool) Whether to enable radiation at the start of the round")]
         public bool EnableRadiationOnRoundStart { get; set; } = true;
 
-        [Description("The delay in seconds after warhead detonation before radiation damage is dealt.\n# Type: float")]
+        [Description("(float) How many seconds to wait after warhead detonation before starting radiation")]
         public float RadiationDelay { get; set; } = 300.0f;
 
-        [Description("The death reason that the player will see due to this plugin.\n# Type: string")]
+        [Description("(string) The reason that gets used on Damage and Kill methods")]
         public string DeathReason { get; set; } = "Died to alpha warhead radiation.";
 
 
-        [Description("The timeframe between each damage tick specified in seconds.\n# Type: float")]
+        [Description("(float) How many seconds to wait between dealing damage")]
         public float TickInterval { get; set; } = 2.0f;
 
-        [Description("The damage that is dealt to the player as an absolute value.\n# Type: float")]
+        [Description("(float) Damage dealt to players specified as a constant")]
         public float TickDamageAbsolute { get; set; } = 10.0f;
 
-        [Description("The damage that is dealt to the player as a percentage of their max health.\n# Type: float")]
-        public float TickDamagePercent { get; set; } = 5.0f;
+        [Description("(float) Damage dealt to players specified as a percentage")]
+        public float TickDamageRelative { get; set; } = 5.0f;
 
 
-        [Description("Enable or disable a broadcast to show when radiation has started.\n# Type: bool")]
+        [Description("(bool) Whether to show a broadcast when radiation starts")]
         public bool BroadcastEnable { get; set; } = true;
 
-        [Description("The text that is shown in the broadcast.\n# Type: string")]
+        [Description("(string) What text should be in the broadcast")]
         public string BroadcastText { get; set; } = "Warhead radiation has reached the surface!";
 
-        [Description("The duration in seconds of the broadcast.\n# Type: ushort")]
+        [Description("(ushort) How many seconds the broadcast should be displayed for")]
         public ushort BroadcastDuration { get; set; } = 10;
 
 
-        [Description("Enable or disable a hint to show players that radiation has started.\n# Type: bool")]
+        [Description("(bool) Whether to show a hint when radiation starts and to players whose role changes")]
         public bool HintEnable { get; set; } = false;
 
-        [Description("The text that is shown in the hint.\n# Type: string")]
+        [Description("(string) What text should be in the hint")]
         public string HintText { get; set; } = "Radiation Poisoning";
 
-        [Description("The duration in seconds of the hint.\n# Type: ushort")]
+        [Description("(ushort) How many seconds the hint should be displayed for")]
         public ushort HintDuration { get; set; } = 10;
 
 
-        [Description("Select which roles will take absolute damage from radiation.\n# Type: List<RoleTypeId>")]
+        [Description("(List<RoleTypeId>) What roles should be dealt constant damage to")]
         public List<RoleTypeId> TakesAbsoluteDamage { get; set; } = new List<RoleTypeId>()
         {
             RoleTypeId.ChaosConscript,
@@ -63,7 +63,7 @@ namespace Radiation
             RoleTypeId.Tutorial
         };
 
-        [Description("Select which roles will take percentage damage from radiation.\n# Type: List<RoleTypeId>")]
+        [Description("(List<RoleTypeId>) What roles should be dealt percentage damage to")]
         public List<RoleTypeId> TakesRelativeDamage { get; set; } = new List<RoleTypeId>()
         {
             RoleTypeId.Scp049,
