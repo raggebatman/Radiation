@@ -3,35 +3,63 @@ using PluginAPI.Core;
 using MEC;
 
 using Radiation.API;
+using System;
 
 namespace Radiation
 {
     public partial class Plugin
     {
+        private const string RadiationDelayCoroutine = "radiation_delay";
+        private const string RadiationTickCorooutine = "radiation_tick";
+
         public bool radiationEnabled { get; private set; } = false;
         public bool radiationStarted { get; private set; } = false;
         public bool radiationDelayed { get; private set; } = false;
 
-        public bool StartDelay()
+        public Tuple<bool, string> StartDelay()
         {
-            if (radiationStarted || !radiationEnabled || radiationDelayed) return false;
+            var status = RadiationAPI.Status();
 
-            Timing.RunCoroutine(DelayCoroutine(), "radiation_delay");
+            if (
+                status.Item1 == Enums.RadiationStatus.Disabled ||
+                status.Item1 == Enums.RadiationStatus.Started ||
+                status.Item1 == Enums.RadiationStatus.Delayed
+            ) return Tuple.Create(false, "Radiation is disabled, already started, or already delayed.");
+
+            Timing.RunCoroutine(DelayCoroutine(), RadiationDelayCoroutine);
 
             radiationDelayed = true;
 
-            return true;
+            return Tuple.Create(true, "Radiation delay has been started.");
         }
 
-        public bool StartRadiation()
+        public Tuple<bool, string> StopDelay()
         {
-            if (radiationStarted || !radiationEnabled) return false;
+            var status = RadiationAPI.Status();
 
-            Timing.KillCoroutines("radiation_delay");
+            if (
+                status.Item1 != Enums.RadiationStatus.Delayed
+            ) return Tuple.Create(false, "Radiation is not delayed.");
+
+            Timing.KillCoroutines(RadiationDelayCoroutine);
 
             radiationDelayed = false;
 
-            Timing.RunCoroutine(TickCoroutine(), "radiation_tick");
+            return Tuple.Create(true, "Radiation delay has been stopped.");
+        }
+
+        public Tuple<bool, string> StartRadiation()
+        {
+            var status = RadiationAPI.Status();
+
+            if (
+                status.Item1 == Enums.RadiationStatus.Disabled ||
+                status.Item1 == Enums.RadiationStatus.Started
+            ) return Tuple.Create(false, "Radiation is disabled or it has already started.");
+
+            StopDelay();
+
+            Timing.RunCoroutine(TickCoroutine(), RadiationTickCorooutine);
 
             radiationStarted = true;
 
@@ -39,52 +67,58 @@ namespace Radiation
 
             RadiationAPI.ShowBroadcast();
 
-            return true;
+            return Tuple.Create(true, "Radiation has been started.");
         }
 
-        public bool StopRadiation()
+        public Tuple<bool, string> StopRadiation()
         {
-            if (!radiationStarted) return false;
+            var status = RadiationAPI.Status();
 
-            Timing.KillCoroutines("radiation_delay");
+            if (
+                status.Item1 == Enums.RadiationStatus.Stopped
+            ) return Tuple.Create(false, "Radiation has already stopped.");
 
-            radiationDelayed = false;
+            StopDelay();
 
-            Timing.KillCoroutines("radiation_tick");
+            Timing.KillCoroutines(RadiationTickCorooutine);
 
             radiationStarted = false;
 
-            return true;
+            return Tuple.Create(true, "Radiation has been stopped.");
         }
 
-        public bool DisableRadiation()
+        public Tuple<bool, string> DisableRadiation()
         {
-            if (!radiationEnabled) return false;
+            var status = RadiationAPI.Status();
 
-            Timing.KillCoroutines("radiation_delay");
+            if (
+                status.Item1 == Enums.RadiationStatus.Disabled
+            ) return Tuple.Create(false, "Radiation is already disabled.");
 
-            radiationDelayed = false;
+            StopDelay();
 
-            Timing.KillCoroutines("radiation_tick");
-
-            radiationStarted = false;
+            StopRadiation();
 
             Log.Info("Disabled radiation");
 
             radiationEnabled = false;
 
-            return true;
+            return Tuple.Create(true, "Radiation has been disabled.");
         }
 
-        public bool EnableRadiation()
+        public Tuple<bool, string> EnableRadiation()
         {
-            if (radiationEnabled) return false;
+            var status = RadiationAPI.Status();
 
-            radiationEnabled = true;
+            if (
+                status.Item1 != Enums.RadiationStatus.Disabled
+            ) return Tuple.Create(false, "Radiation is already enabled.");
 
             Log.Info("Enabled radiation");
 
-            return true;
+            radiationEnabled = true;
+
+            return Tuple.Create(true, "Radiation has been enabled.");
         }
 
         private IEnumerator<float> DelayCoroutine()

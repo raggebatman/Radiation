@@ -18,16 +18,10 @@ namespace Radiation.Commands
                 return false;
             }
 
-            if (Plugin.Singleton.StartRadiation())
-            {
-                response = "Radiation has been started.";
-                return true;
-            }
-            else
-            {
-                response = "Radiation has already started.";
-                return false;
-            }
+            var command = Plugin.Singleton.StartRadiation();
+
+            response = command.Item2;
+            return command.Item1;
         }
     }
 }
