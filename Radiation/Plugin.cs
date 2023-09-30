@@ -15,8 +15,8 @@ namespace Radiation
         public Config Config;
 
         [PluginPriority(LoadPriority.Low)]
-        [PluginEntryPoint("radiation", "1.0.1", "Warhead radiation to hinder prolonged rounds.", "raggebatman")]
-        void LoadPlugin()
+        [PluginEntryPoint("radiation", "1.1.1", "Warhead radiation to hinder prolonged rounds.", "raggebatman")]
+        public void LoadPlugin()
         {
             try
             {
