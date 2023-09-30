@@ -25,6 +25,7 @@ namespace Radiation
                 RegisterCommand(new EnableCommand());
                 RegisterCommand(new DisableCommand());
                 RegisterCommand(new StatusCommand());
+                RegisterCommand(new VersionCommand());
             }
             catch (Exception e)
             {
@@ -49,6 +50,7 @@ namespace Radiation
             stringBuilder.AppendLine("- radiation enable - Enable tick damage, will start tick damage if warhead is detonated");
             stringBuilder.AppendLine("- radiation disable - Disable tick damage, will not start tick damage if warhead detonates");
             stringBuilder.AppendLine("- radiation status - Show radiation status");
+            stringBuilder.AppendLine("- radiation version - Show plugin version");
 
             response = StringBuilderPool.Shared.ToStringReturn(stringBuilder);
 

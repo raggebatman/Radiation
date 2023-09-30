@@ -10,8 +10,6 @@ View the config file for details.
 
 ## Commands
 
-Radiation is managed using the `radiation` command.
-
 - `radiation start`
 - `radiation stop`
 - `radiation enable`
@@ -20,13 +18,10 @@ Radiation is managed using the `radiation` command.
 
 ## Permissions
 
-Each command has its own permission.
-
 - `radiation.start`
 - `radiation.stop`
 - `radiation.enable`
 - `radiation.disable`
-- `radiation.status`
 
 ## Details
 

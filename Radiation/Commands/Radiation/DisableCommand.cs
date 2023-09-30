@@ -18,16 +18,10 @@ namespace Radiation.Commands
                 return false;
             }
 
-            if (Plugin.Singleton.DisableRadiation())
-            {
-                response = "Radiation has been disabled.";
-                return true;
-            }
-            else
-            {
-                response = "Radiation is already disabled.";
-                return false;
-            }
+            var command = Plugin.Singleton.DisableRadiation();
+
+            response = command.Item2;
+            return command.Item1;
         }
     }
 }

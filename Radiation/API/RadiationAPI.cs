@@ -2,6 +2,7 @@
 using PlayerStatsSystem;
 using Radiation.Enums;
 using PlayerRoles;
+using System;
 
 namespace Radiation.API
 {
@@ -122,6 +123,37 @@ namespace Radiation.API
             }
 
             return true;
+        }
+
+        public static Tuple<RadiationStatus, string> Status()
+        {
+            RadiationStatus status;
+            string response;
+
+            if (!Plugin.Singleton.radiationEnabled)
+            {
+                status = RadiationStatus.Disabled;
+                response = "Radiation is disabled.";
+            }
+            else
+            if (Plugin.Singleton.radiationDelayed)
+            {
+                status = RadiationStatus.Delayed;
+                response = "Radiation will occur soon.";
+            }
+            else
+            if (Plugin.Singleton.radiationStarted)
+            {
+                status = RadiationStatus.Started;
+                response = "Radiation is active.";
+            }
+            else
+            {
+                status = RadiationStatus.Stopped;
+                response = "Radiation is inactive.";
+            }
+
+            return Tuple.Create(status, response);
         }
     }
 }
