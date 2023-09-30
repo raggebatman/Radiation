@@ -17,6 +17,7 @@ namespace Radiation.Events
         [PluginEvent(ServerEventType.RoundStart)]
         private void OnRoundStart(RoundStartEvent @event)
         {
+            Plugin.Singleton.StopDelay();
             Plugin.Singleton.StopRadiation();
 
             if (_config.EnableRadiationOnRoundStart)
@@ -28,12 +29,14 @@ namespace Radiation.Events
         [PluginEvent(ServerEventType.RoundEnd)]
         private void OnRoundEnd(RoundEndEvent @event)
         {
+            Plugin.Singleton.StopDelay();
             Plugin.Singleton.StopRadiation();
         }
 
         [PluginEvent(ServerEventType.RoundRestart)]
         private void OnRoundRestart(RoundRestartEvent @event)
         {
+            Plugin.Singleton.StopDelay();
             Plugin.Singleton.StopRadiation();
         }
 
