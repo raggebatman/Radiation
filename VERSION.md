@@ -1,5 +1,43 @@
 # History
 
+## 1.1.1
+
+Revision.
+
+Summary:
+
+- Fixed an issue where radiation would start on the next round before warhead detonation.
+
+- New command `radiation version`
+
+Added:
+
+- Command `Commands.VersionCommand`
+
+- Enum `Enums.RadiationStatus`
+
+- Method `RadiationAPI.Status()`
+
+Changed:
+
+- Coroutine tags now use constants rather than unique strings.
+
+- In events that stop radiation, `StopDelay()` now gets called as well as
+`StopRadiation()`. Previously only `StopRadiation()` would be called. `StopRadiation()`
+does call `StopDelay()` in its body but it is called after the check is done
+that determines whether or not radiation has started. The result would be that
+the radiation delay coroutine does not get killed when restarting the round if
+radiation had not been started, meaning that radiation would "leak through" to
+the next round.
+
+- Tuples are now used as return values instead of booleans. This mainly improves
+how command feedback is handled.
+
+Removed:
+
+- Permissions `radiation.status` and `radiation.version`, these can now be used
+by anyone with access to the Remote Admin console.
+
 ## 1.1.0
 
 Minor release.
